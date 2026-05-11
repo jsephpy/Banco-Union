@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banco Unión S.A. – El Banco de los Bolivianos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --navy:      #051b4a;
+      --navy-mid:  #082464;
+      --navy-light:#0c3080;
+      --cyan:      #00c8f0;
+      --cyan-glow: #00e5ff;
+      --gold:      #f5c842;
+      --red-brand: #d43030;
+      --green-brand:#1db870;
+      --white:     #ffffff;
+      --glass:     rgba(255,255,255,.07);
+      --glass-border: rgba(0,200,240,.25);
+      --text-muted: rgba(255,255,255,.65);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 3px; }
+
+    /* ─── TOP BAR ─── */
+    .topbar {
+      background: var(--navy-mid);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 8px 40px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 24px;
+      font-size: .78rem;
+      letter-spacing: .04em;
+    }
+    .topbar a {
+      color: var(--text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color .2s;
+    }
+    .topbar a:hover { color: var(--cyan); }
+    .topbar a i { font-size: .8rem; }
+
+    /* ─── HEADER ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5,27,74,.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 40px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    /* Logo */
+    .logo-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      overflow: hidden;
+    }
+    .logo-icon span { display: block; }
+    .logo-icon .q1 { background: #f5c842; }
+    .logo-icon .q2 { background: #00b4d8; }
+    .logo-icon .q3 { background: #d43030; }
+    .logo-icon .q4 { background: #1db870; }
+    .logo-text { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--white); line-height: 1.1; }
+    .logo-text span { color: var(--cyan); }
+
+    /* Nav */
+    nav { display: flex; align-items: center; gap: 4px; }
+    .nav-item { position: relative; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .03em;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .2s, color .2s;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .nav-link:hover, .nav-link.active { background: var(--glass); color: var(--white); }
+    .nav-link i { font-size: .7rem; transition: transform .2s; }
+    .nav-item:hover .nav-link i { transform: rotate(180deg); }
+
+    /* Dropdown */
+    .dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 220px;
+      background: var(--navy-mid);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 8px 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity .2s, transform .2s;
+      z-index: 200;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    }
+    .nav-item:hover .dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      font-size: .82rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: background .15s, color .15s;
+    }
+    .dropdown a::before { content: '›'; color: var(--cyan); font-size: 1rem; }
+    .dropdown a:hover { background: var(--glass); color: var(--white); }
+
+    /* CTA button */
+    .btn-cta {
+      padding: 10px 22px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--cyan), #0090c0);
+      color: var(--navy);
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: .82rem;
+      letter-spacing: .04em;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: box-shadow .2s, transform .15s;
+      white-space: nowrap;
+      box-shadow: 0 0 20px rgba(0,200,240,.3);
+    }
+    .btn-cta:hover { box-shadow: 0 0 32px rgba(0,200,240,.6); transform: translateY(-1px); }
+
+    /* Hamburger */
+    .hamburger { display: none; background: none; border: none; color: var(--white); font-size: 1.4rem; cursor: pointer; }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 80px 40px;
+    }
+
+    /* Animated background */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(0,144,192,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(0,200,240,.12) 0%, transparent 70%),
+        linear-gradient(160deg, var(--navy) 0%, #061d55 60%, #031336 100%);
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,240,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,240,.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%);
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .orb1 { width: 500px; height: 500px; background: rgba(0,200,240,.08); right: -100px; top: -100px; animation-delay: 0s; }
+    .orb2 { width: 300px; height: 300px; background: rgba(245,200,66,.06); right: 200px; bottom: 0; animation-delay: 3s; }
+    .orb3 { width: 200px; height: 200px; background: rgba(29,184,112,.06); left: 10%; top: 30%; animation-delay: 5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,200,240,.1);
+      border: 1px solid rgba(0,200,240,.3);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: .78rem;
+      color: var(--cyan);
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      animation: fadeUp .6s ease both;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: pulse 1.5s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+    .hero-title {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      margin-bottom: 20px;
+      animation: fadeUp .6s .1s ease both;
+    }
+    .hero-title .accent { color: var(--cyan); }
+    .hero-title .underline-gold {
+      position: relative;
+      display: inline-block;
+    }
+    .hero-title .underline-gold::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold);
+      border-radius: 2px;
+      animation: growLine .8s .5s ease both;
+      transform-origin: left;
+    }
+    @keyframes growLine { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 36px;
+      animation: fadeUp .6s .2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: fadeUp .6s .3s ease both;
+    }
+    .btn-primary {
+      padding: 14px 32px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--cyan), #007ab0);
+      color: var(--navy);
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: box-shadow .25s, transform .15s;
+      box-shadow: 0 0 30px rgba(0,200,240,.35);
+    }
+    .btn-primary:hover { box-shadow: 0 0 50px rgba(0,200,240,.6); transform: translateY(-2px); }
+    .btn-outline {
+      padding: 14px 32px;
+      border-radius: 50px;
+      background: transparent;
+      color: var(--white);
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      font-size: .9rem;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.25);
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-outline:hover { border-color: var(--cyan); background: rgba(0,200,240,.08); }
+
+    /* Stats row */
+    .hero-stats {
+      display: flex;
+      gap: 28px;
+      margin-top: 40px;
+      animation: fadeUp .6s .4s ease both;
+    }
+    .stat { text-align: left; }
+    .stat-num {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      color: var(--cyan);
+      line-height: 1;
+    }
+    .stat-label { font-size: .75rem; color: var(--text-muted); margin-top: 2px; }
+    .stat-sep { width: 1px; background: var(--glass-border); }
+
+    /* Hero right: cards stack */
+    .hero-cards {
+      position: relative;
+      height: 380px;
+      animation: fadeUp .6s .2s ease both;
+    }
+    .hero-card {
+      position: absolute;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      padding: 24px 28px;
+    }
+    .hc1 { width: 280px; top: 0; left: 40px; transform: rotate(-4deg); }
+    .hc2 { width: 300px; top: 80px; left: 0; transform: rotate(2deg); background: rgba(0,200,240,.08); }
+    .hc3 { width: 260px; bottom: 20px; right: 0; transform: rotate(-2deg); }
+
+    .card-chip {
+      width: 36px; height: 26px; border-radius: 5px;
+      background: linear-gradient(135deg, var(--gold), #c8a000);
+      margin-bottom: 16px;
+    }
+    .card-number { font-family: 'Sora', sans-serif; font-size: .9rem; letter-spacing: .2em; color: var(--text-muted); }
+    .card-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: .95rem; margin-top: 12px; }
+    .card-tag { font-size: .72rem; color: var(--cyan); font-weight: 600; text-transform: uppercase; margin-bottom: 8px; letter-spacing: .06em; }
+    .card-amount { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--white); }
+    .card-sub { font-size: .75rem; color: var(--text-muted); }
+    .card-icon-lg { font-size: 2rem; color: var(--cyan); margin-bottom: 8px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SECTION COMMONS ─── */
+    section { padding: 80px 40px; }
+    .section-inner { max-width: 1280px; margin: 0 auto; }
+    .section-label {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      line-height: 1.15;
+      letter-spacing: -.01em;
+      margin-bottom: 14px;
+    }
+    .section-sub { color: var(--text-muted); font-size: 1rem; max-width: 560px; line-height: 1.7; margin-bottom: 48px; }
+
+    /* ─── SERVICES ─── */
+    .services { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .service-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 28px 20px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--white);
+      transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+    .service-card:hover {
+      background: rgba(0,200,240,.1);
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,200,240,.15);
+    }
+    .service-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin: 0 auto 14px;
+    }
+    .service-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: .88rem; letter-spacing: .01em; }
+    .service-desc { font-size: .75rem; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+
+    /* ─── PRODUCTS STRIP ─── */
+    .products { background: var(--navy-mid); }
+    .products-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .tab-btn {
+      padding: 9px 20px;
+      border-radius: 50px;
+      border: 1px solid var(--glass-border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--cyan);
+      color: var(--navy);
+      border-color: var(--cyan);
+    }
+    .products-grid { display: none; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .products-grid.active { display: grid; }
+    .product-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: var(--white);
+      transition: border-color .2s, transform .2s;
+    }
+    .product-card:hover { border-color: var(--cyan); transform: translateY(-3px); }
+    .product-card h4 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: .95rem; margin-bottom: 6px; }
+    .product-card p { font-size: .78rem; color: var(--text-muted); line-height: 1.5; }
+    .product-arrow { color: var(--cyan); font-size: .8rem; margin-top: 14px; display: block; }
+
+    /* ─── DIGITAL BANNER ─── */
+    .digital-banner {
+      background: linear-gradient(135deg, var(--navy-light), var(--navy-mid));
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 60px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .digital-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,200,240,.12), transparent 70%);
+    }
+    .digital-banner-text { position: relative; z-index: 1; }
+    .digital-banner-text h2 { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 2rem; margin-bottom: 14px; }
+    .digital-banner-text p { color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; }
+    .app-badges { display: flex; gap: 12px; flex-wrap: wrap; }
+    .app-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 20px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--white);
+      transition: background .2s;
+    }
+    .app-badge:hover { background: rgba(255,255,255,.14); }
+    .app-badge i { font-size: 1.4rem; }
+    .app-badge span { font-size: .7rem; color: var(--text-muted); display: block; }
+    .app-badge strong { font-size: .9rem; display: block; }
+    .digital-phones {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: -20px;
+    }
+    .phone-mock {
+      width: 160px;
+      height: 310px;
+      border-radius: 28px;
+      background: linear-gradient(160deg, rgba(0,200,240,.15), rgba(5,27,74,.8));
+      border: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px;
+    }
+    .phone-mock i { font-size: 2.2rem; color: var(--cyan); }
+    .phone-mock p { font-size: .75rem; color: var(--text-muted); text-align: center; }
+    .phone-mock2 { transform: rotate(6deg) translateX(-20px); margin-top: 20px; }
+
+    /* ─── INFO CARDS ROW ─── */
+    .info-row {
+      background: var(--navy);
+      padding: 60px 40px;
+    }
+    .info-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .info-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-decoration: none;
+      color: var(--white);
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .info-card:hover { border-color: var(--cyan); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,200,240,.12); }
+    .info-card-icon { font-size: 1.8rem; margin-bottom: 16px; }
+    .info-card h3 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
+    .info-card p { font-size: .82rem; color: var(--text-muted); line-height: 1.6; }
+    .info-card .link-arrow { color: var(--cyan); font-size: .8rem; margin-top: 16px; display: block; font-weight: 600; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #020e2e;
+      border-top: 1px solid var(--glass-border);
+      padding: 60px 40px 32px;
+    }
+    .footer-inner { max-width: 1280px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+    .footer-brand p { font-size: .82rem; color: var(--text-muted); line-height: 1.7; margin-top: 14px; max-width: 260px; }
+    .footer-col h5 {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: .82rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 9px;
+      transition: color .15s;
+    }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom {
+      border-top: 1px solid var(--glass-border);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .footer-bottom p { font-size: .78rem; color: var(--text-muted); }
+    .socials { display: flex; gap: 10px; }
+    .social-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: .85rem;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    .social-btn:hover { background: var(--cyan); color: var(--navy); border-color: var(--cyan); }
+
+    /* ─── FLOATING WHATSAPP ─── */
+    .whatsapp-fab {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .whatsapp-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #25d366, #128c4b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.6rem;
+      text-decoration: none;
+      box-shadow: 0 6px 28px rgba(37,211,102,.5);
+      transition: transform .2s, box-shadow .2s;
+      animation: waBounce 2.5s ease-in-out 2s infinite;
+    }
+    .whatsapp-btn:hover {
+      transform: scale(1.12);
+      box-shadow: 0 10px 40px rgba(37,211,102,.7);
+      animation: none;
+    }
+    @keyframes waBounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .whatsapp-tooltip {
+      background: #25d366;
+      color: white;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 50px;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(37,211,102,.4);
+      opacity: 0;
+      transform: translateX(8px);
+      transition: opacity .2s, transform .2s;
+      pointer-events: none;
+    }
+    .whatsapp-fab:hover .whatsapp-tooltip { opacity: 1; transform: translateX(0); }
+
+    /* ─── MOBILE MENU ─── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,27,74,.97);
+      z-index: 500;
+      flex-direction: column;
+      padding: 24px 28px;
+      overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-close {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 1.5rem; cursor: pointer; align-self: flex-end; margin-bottom: 24px;
+    }
+    .mobile-nav-link {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--glass-border);
+      color: var(--white);
+      text-decoration: none;
+      font-family: 'Sora', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mobile-sub { padding: 8px 0 8px 16px; }
+    .mobile-sub a {
+      display: block;
+      padding: 8px 0;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: .9rem;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .mobile-sub a:hover { color: var(--cyan); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      nav { display: none; }
+      .hamburger { display: block; }
+      .hero-content { grid-template-columns: 1fr; }
+      .hero-cards { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .info-cards { grid-template-columns: 1fr; }
+      .digital-banner { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      section { padding: 60px 20px; }
+      .hero { padding: 60px 20px; }
+      .topbar { padding: 8px 20px; }
+      .header-inner { padding: 0 20px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .digital-banner { padding: 36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── TOP BAR ─── -->
+<div class="topbar">
+  <a href="/AgenciasAtm/AgenciasAtms"><i class="fa fa-map-marker-alt"></i> Encuentranos</a>
+  <a href="https://uninetplus.bancounion.com.bo/Uninetplus/Account/Login" target="_blank" rel="noopener">
+    <i class="fa fa-lock"></i> UNInet Plus
+  </a>
+  <a href="tel:800100600"><i class="fa fa-phone"></i> 800 10 0600</a>
+</div>
+
+<!-- ─── HEADER ─── -->
+<header>
+  <div class="header-inner">
+    <a class="logo-mark" href="/">
+      <div class="logo-icon">
+        <span class="q1"></span><span class="q2"></span>
+        <span class="q3"></span><span class="q4"></span>
+      </div>
+      <div class="logo-text">BANCO<br><span>UNIÓN</span> <small style="font-size:.6em;color:var(--text-muted);">S.A.</small></div>
+    </a>
+
+    <nav>
+      <!-- Personas -->
+      <div class="nav-item">
+        <a class="nav-link" href="/Personas/Index">Personas <i class="fas fa-chevron-down"></i></a>
+        <div class="dropdown">
+          <a href="/UnicasaViviendaSocial">Unicasa Vivienda Social</a>
+          <a href="/Personas/UniAuto">UniAuto</a>
+          <a href="/Personas/Unicredito">UniCrédito</a>
+          <a href="/Personas/CreditoDeConvenio">Crédito de Convenio</a>
+          <a href="/CreditoTuristico">Crédito Turístico</a>
+          <a href="/Anuncio/Index?anuncio=523">UniAuto Verde</a>
+          <a href="/Unicasa">UniCasa</a>
+        </div>
+      </div>
+      <!-- Empresas -->
+      <div class="nav-item">
+        <a class="nav-link" href="/Empresas/Index">Empresas <i class="fas fa-chevron-down"></i></a>
+        <div class="dropdown">
+          <a href="/Empresas/Index">Productos Empresas</a>
+          <a href="/Empresas/Index">Financiamiento</a>
+        </div>
+      </div>
+      <!-- PyME -->
+      <div class="nav-item">
+        <a class="nav-link" href="/PyME/Index">PyME <i class="fas fa-chevron-down"></i></a>
+        <div class="dropdown">
+          <a href="/PyME/Index">Productos PyME</a>
+        </div>
+      </div>
+      <!-- Microcréditos -->
+      <div class="nav-item">
+        <a class="nav-link" href="/Microcreditos/Index">Microcréditos <i class="fas fa-chevron-down"></i></a>
+        <div class="dropdown">
+          <a href="/Microcreditos/Index">Microcréditos</a>
+        </div>
+      </div>
+      <!-- Banca Digital -->
+      <div class="nav-item">
+        <a class="nav-link" href="/BancaDigital/Index">Banca Digital <i class="fas fa-chevron-down"></i></a>
+        <div class="dropdown">
+          <a href="/BancaDigital/Index">Servicios Digitales</a>
+          <a href="https://uninetplus.bancounion.com.bo/Uninetplus/Account/Login" target="_blank">UNInet Plus</a>
+        </div>
+      </div>
+      <!-- Grupo -->
+      <div class="nav-item">
+        <a class="nav-link" href="/GrupoUnion/Index">Grupo Unión <i class="fas fa-chevron-down"></i></a>
+        <div class="dropdown">
+          <a href="/GrupoUnion/Index">Quiénes Somos</a>
+          <a href="/BancaMujer">Banca Mujer</a>
+          <a href="/BancaEstatal/Index">Banca Estatal</a>
+        </div>
+      </div>
+    </nav>
+
+    <a class="btn-cta" href="https://uninetplus.bancounion.com.bo/Uninetplus/Account/Login" target="_blank">Acceder a UNInet</a>
+    <button class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+  </div>
+</header>
+
+<!-- ─── MOBILE MENU ─── -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
+  <a class="mobile-nav-link" href="/Personas/Index">Personas</a>
+  <div class="mobile-sub">
+    <a href="/UnicasaViviendaSocial">Unicasa Vivienda Social</a>
+    <a href="/Personas/UniAuto">UniAuto</a>
+    <a href="/Personas/Unicredito">UniCrédito</a>
+    <a href="/Personas/CreditoDeConvenio">Crédito de Convenio</a>
+  </div>
+  <a class="mobile-nav-link" href="/Empresas/Index">Empresas</a>
+  <a class="mobile-nav-link" href="/PyME/Index">PyME</a>
+  <a class="mobile-nav-link" href="/Microcreditos/Index">Microcréditos</a>
+  <a class="mobile-nav-link" href="/BancaEstatal/Index">Banca Estatal</a>
+  <a class="mobile-nav-link" href="/BancaDigital/Index">Banca Digital</a>
+  <a class="mobile-nav-link" href="/GrupoUnion/Index">Grupo Unión</a>
+  <a class="mobile-nav-link" href="/BancaMujer">Banca Mujer</a>
+  <br />
+  <a class="btn-primary" href="https://uninetplus.bancounion.com.bo/Uninetplus/Account/Login" target="_blank" style="text-align:center;display:block;">Acceder a UNInet Plus</a>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">✦ El Banco de los Bolivianos</div>
+      <h1 class="hero-title">
+        Tu <span class="accent">futuro financiero</span><br>
+        comienza <span class="underline-gold">aquí</span>
+      </h1>
+      <p class="hero-sub">
+        Banco Unión S.A. — con la red de agencias y ATMs más grande de Bolivia. Créditos, ahorros, seguros y banca digital para personas, empresas y PyMEs.
+      </p>
+      <div class="hero-actions">
+        <a href="/Personas/Index" class="btn-primary">Explorar productos</a>
+        <a href="/AgenciasAtm/AgenciasAtms" class="btn-outline"><i class="fas fa-map-marker-alt"></i> Encuentranos</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">700+</div>
+          <div class="stat-label">Agencias a nivel nacional</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat">
+          <div class="stat-num">3M+</div>
+          <div class="stat-label">Clientes bolivianos</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat">
+          <div class="stat-num">24/7</div>
+          <div class="stat-label">Banca digital disponible</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-cards">
+      <div class="hero-card hc1">
+        <div class="card-chip"></div>
+        <div class="card-number">•••• •••• •••• 4821</div>
+        <div class="card-name">UniCrédito Unión</div>
+      </div>
+      <div class="hero-card hc2">
+        <div class="card-tag">Mi saldo disponible</div>
+        <div class="card-amount">Bs 24,500.00</div>
+        <div class="card-sub">Cuenta de Ahorros · actualizado ahora</div>
+      </div>
+      <div class="hero-card hc3">
+        <div class="card-icon-lg"><i class="fas fa-shield-halved"></i></div>
+        <div class="card-tag">Seguro activo</div>
+        <div class="card-name">UniSeguro Personal</div>
+        <div class="card-sub" style="margin-top:4px">Cobertura completa</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SERVICES ─── -->
+<section class="services">
+  <div class="section-inner">
+    <div class="section-label">Nuestros servicios</div>
+    <h2 class="section-title">Todo lo que necesitas,<br>en un solo banco</h2>
+    <p class="section-sub">Accede a la gama completa de productos financieros diseñados para cada etapa de tu vida.</p>
+
+    <div class="services-grid">
+      <a href="/Personas/Index" class="service-card">
+        <div class="service-icon" style="background:rgba(0,200,240,.12);color:var(--cyan)"><i class="fas fa-user"></i></div>
+        <div class="service-name">Personas</div>
+        <div class="service-desc">Créditos, cuentas y seguros personales</div>
+      </a>
+      <a href="/Empresas/Index" class="service-card">
+        <div class="service-icon" style="background:rgba(245,200,66,.12);color:var(--gold)"><i class="fas fa-building"></i></div>
+        <div class="service-name">Empresas</div>
+        <div class="service-desc">Financiamiento y banca corporativa</div>
+      </a>
+      <a href="/PyME/Index" class="service-card">
+        <div class="service-icon" style="background:rgba(29,184,112,.12);color:var(--green-brand)"><i class="fas fa-store"></i></div>
+        <div class="service-name">PyME</div>
+        <div class="service-desc">Soluciones para pequeñas y medianas empresas</div>
+      </a>
+      <a href="/Microcreditos/Index" class="service-card">
+        <div class="service-icon" style="background:rgba(212,48,48,.12);color:var(--red-brand)"><i class="fas fa-hand-holding-dollar"></i></div>
+        <div class="service-name">Microcréditos</div>
+        <div class="service-desc">Acceso al crédito para emprendedores</div>
+      </a>
+      <a href="/BancaEstatal/Index" class="service-card">
+        <div class="service-icon" style="background:rgba(0,144,192,.12);color:#0090c0"><i class="fas fa-landmark"></i></div>
+        <div class="service-name">Banca Estatal</div>
+        <div class="service-desc">Productos para el sector público</div>
+      </a>
+      <a href="/BancaDigital/Index" class="service-card">
+        <div class="service-icon" style="background:rgba(0,200,240,.12);color:var(--cyan)"><i class="fas fa-mobile-screen"></i></div>
+        <div class="service-name">Banca Digital</div>
+        <div class="service-desc">Gestiona tu cuenta desde cualquier lugar</div>
+      </a>
+      <a href="/BancaMujer" class="service-card">
+        <div class="service-icon" style="background:rgba(212,48,48,.12);color:#e060a0"><i class="fas fa-heart"></i></div>
+        <div class="service-name">Banca Mujer</div>
+        <div class="service-desc">Productos diseñados para la mujer boliviana</div>
+      </a>
+      <a href="/GrupoUnion/Index" class="service-card">
+        <div class="service-icon" style="background:rgba(245,200,66,.12);color:var(--gold)"><i class="fas fa-globe"></i></div>
+        <div class="service-name">Grupo Unión</div>
+        <div class="service-desc">Conoce toda la familia Unión</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRODUCTS ─── -->
+<section class="products">
+  <div class="section-inner">
+    <div class="section-label">Catálogo de productos</div>
+    <h2 class="section-title">Encuentra el producto ideal</h2>
+
+    <div class="products-tabs">
+      <button class="tab-btn active" onclick="showTab('creditos', this)">Créditos</button>
+      <button class="tab-btn" onclick="showTab('seguros', this)">Seguros</button>
+      <button class="tab-btn" onclick="showTab('cuentas', this)">Cuentas y DPF</button>
+    </div>
+
+    <div id="tab-creditos" class="products-grid active">
+      <a href="/UnicasaViviendaSocial" class="product-card">
+        <h4>🏠 Unicasa Vivienda Social</h4>
+        <p>Crédito de vivienda social a tasas preferenciales para la familia boliviana.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/Personas/UniAuto" class="product-card">
+        <h4>🚗 UniAuto</h4>
+        <p>Financia tu vehículo nuevo o usado con las mejores condiciones del mercado.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/Personas/Unicredito" class="product-card">
+        <h4>💳 UniCrédito</h4>
+        <p>Crédito personal flexible para cubrir tus metas y necesidades inmediatas.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/Personas/CreditoDeConvenio" class="product-card">
+        <h4>🤝 Crédito de Convenio</h4>
+        <p>Crédito especial para trabajadores con convenio institucional.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/CreditoTuristico" class="product-card">
+        <h4>✈️ Crédito Turístico</h4>
+        <p>Financia tus viajes dentro y fuera de Bolivia con facilidad.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/Anuncio/Index?anuncio=523" class="product-card">
+        <h4>🌿 UniAuto Verde</h4>
+        <p>Crédito para vehículos eléctricos e híbridos. Apuesta por el futuro.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+    </div>
+
+    <div id="tab-seguros" class="products-grid">
+      <a href="/MujerSegura" class="product-card">
+        <h4>💜 Mujer Segura</h4>
+        <p>Seguro diseñado especialmente para la protección de la mujer boliviana.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/ServidoresPublicos" class="product-card">
+        <h4>🏛️ Servidores Públicos</h4>
+        <p>Cobertura especial para empleados del sector público del Estado.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/UNISEGURO" class="product-card">
+        <h4>🛡️ UniSeguro</h4>
+        <p>Seguro de vida y protección patrimonial integral para ti y tu familia.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/CIBERSEGURO" class="product-card">
+        <h4>🔐 Ciber Seguro</h4>
+        <p>Protección ante fraudes, robos de identidad y delitos cibernéticos.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/Microvida" class="product-card">
+        <h4>❤️ Microvida</h4>
+        <p>Seguro de vida accesible para microempresarios y emprendedores.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/Seguros/SegurosColectivos" class="product-card">
+        <h4>👥 Seguros Colectivos</h4>
+        <p>Coberturas grupales para empresas e instituciones bolivianas.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+    </div>
+
+    <div id="tab-cuentas" class="products-grid">
+      <a href="/Personas/Index" class="product-card">
+        <h4>💰 Cuenta de Ahorros</h4>
+        <p>Ahorra en bolivianos o dólares con rendimientos competitivos.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/Personas/Index" class="product-card">
+        <h4>🏦 Cuenta Corriente</h4>
+        <p>Administra tu dinero con chequera y acceso total a tus fondos.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/Personas/Index" class="product-card">
+        <h4>📈 DPF</h4>
+        <p>Depósito a Plazo Fijo con las mejores tasas de rendimiento del mercado.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+      <a href="/ComponenteVariable" class="product-card">
+        <h4>📊 Componente Variable</h4>
+        <p>Invierte y accede a beneficios variables según el rendimiento del banco.</p>
+        <span class="product-arrow">Conocer más →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DIGITAL BANNER ─── -->
+<section style="background:var(--navy-mid);padding:60px 40px;">
+  <div class="section-inner">
+    <div class="digital-banner">
+      <div class="digital-banner-text">
+        <div class="section-label">Banca digital</div>
+        <h2>Banco Unión<br>en tu bolsillo</h2>
+        <p>Con UNInet Plus puedes transferir, pagar y gestionar todas tus cuentas desde tu smartphone. Disponible las 24 horas, los 7 días de la semana.</p>
+        <div class="app-badges">
+          <a href="https://uninetplus.bancounion.com.bo/Uninetplus/Account/Login" class="app-badge" target="_blank" rel="noopener">
+            <i class="fab fa-google-play"></i>
+            <div><span>Disponible en</span><strong>Google Play</strong></div>
+          </a>
+          <a href="https://uninetplus.bancounion.com.bo/Uninetplus/Account/Login" class="app-badge" target="_blank" rel="noopener">
+            <i class="fab fa-apple"></i>
+            <div><span>Descarga en</span><strong>App Store</strong></div>
+          </a>
+          <a href="/BancaDigital/Index" class="app-badge">
+            <i class="fas fa-desktop"></i>
+            <div><span>Accede desde</span><strong>Web</strong></div>
+          </a>
+        </div>
+      </div>
+      <div class="digital-phones">
+        <div class="phone-mock">
+          <i class="fas fa-mobile-screen-button"></i>
+          <p>UNInet Plus<br>App Móvil</p>
+        </div>
+        <div class="phone-mock phone-mock2">
+          <i class="fas fa-qrcode"></i>
+          <p>Pagos QR<br>instantáneos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── INFO ROW ─── -->
+<div class="info-row">
+  <div class="section-inner">
+    <div class="info-cards">
+      <a href="/AgenciasAtm/AgenciasAtms" class="info-card">
+        <div class="info-card-icon">🗺️</div>
+        <h3>Encuentra tu agencia</h3>
+        <p>Con más de 700 agencias y ATMs en todo Bolivia, siempre tendrás un Banco Unión cerca.</p>
+        <span class="link-arrow">Ver mapa de agencias →</span>
+      </a>
+      <a href="/Personas/Index" class="info-card">
+        <div class="info-card-icon">📞</div>
+        <h3>Atención al cliente</h3>
+        <p>Llama gratis al <strong>800 10 0600</strong> o escríbenos por WhatsApp. Estamos para ayudarte.</p>
+        <span class="link-arrow">Contáctanos →</span>
+      </a>
+      <a href="/GrupoUnion/Index" class="info-card">
+        <div class="info-card-icon">🌐</div>
+        <h3>Sobre Banco Unión</h3>
+        <p>Conoce nuestra historia, misión y visión como el banco más grande y representativo de Bolivia.</p>
+        <span class="link-arrow">Conocer más →</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo-mark" href="/" style="text-decoration:none;display:flex;align-items:center;gap:10px">
+          <div class="logo-icon" style="width:36px;height:36px">
+            <span class="q1"></span><span class="q2"></span>
+            <span class="q3"></span><span class="q4"></span>
+          </div>
+          <div class="logo-text" style="font-size:1rem">BANCO <span>UNIÓN</span></div>
+        </a>
+        <p>El Banco de los Bolivianos. Comprometidos con el desarrollo económico y social de Bolivia desde nuestros inicios.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Personas</h5>
+        <a href="/UnicasaViviendaSocial">Unicasa Vivienda Social</a>
+        <a href="/Personas/UniAuto">UniAuto</a>
+        <a href="/Personas/Unicredito">UniCrédito</a>
+        <a href="/Personas/CreditoDeConvenio">Crédito de Convenio</a>
+        <a href="/CreditoTuristico">Crédito Turístico</a>
+      </div>
+      <div class="footer-col">
+        <h5>Seguros</h5>
+        <a href="/MujerSegura">Mujer Segura</a>
+        <a href="/ServidoresPublicos">Servidores Públicos</a>
+        <a href="/UNISEGURO">UniSeguro</a>
+        <a href="/CIBERSEGURO">Ciber Seguro</a>
+        <a href="/Microvida">Microvida</a>
+        <a href="/Seguros/SegurosColectivos">Seguros Colectivos</a>
+      </div>
+      <div class="footer-col">
+        <h5>Más servicios</h5>
+        <a href="/Empresas/Index">Empresas</a>
+        <a href="/PyME/Index">PyME</a>
+        <a href="/Microcreditos/Index">Microcréditos</a>
+        <a href="/BancaEstatal/Index">Banca Estatal</a>
+        <a href="/BancaDigital/Index">Banca Digital</a>
+        <a href="/BancaMujer">Banca Mujer</a>
+        <a href="/GrupoUnion/Index">Grupo Unión</a>
+        <a href="/ComponenteVariable">Componente Variable</a>
+        <a href="/AgenciasAtm/AgenciasAtms">Agencias y ATMs</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Banco Unión S.A. – El Banco de los Bolivianos. Todos los derechos reservados.</p>
+      <div class="socials">
+        <a class="social-btn" href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a class="social-btn" href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a class="social-btn" href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+        <a class="social-btn" href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a class="social-btn" href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── FLOATING WHATSAPP ─── -->
+<div class="whatsapp-fab">
+  <span class="whatsapp-tooltip">¡Chatea con nosotros!</span>
+  <a class="whatsapp-btn" href="https://wa.me/59172800600?text=Hola%20Banco%20Un%C3%B3n%2C%20necesito%20informaci%C3%B3n%20sobre%20sus%20productos." target="_blank" rel="noopener" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+</div>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  function showTab(id, btn) {
+    document.querySelectorAll('.products-grid').forEach(g => g.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // Animate elements on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = 1;
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .product-card, .info-card').forEach(el => {
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity .4s ease, transform .4s ease, border-color .2s, box-shadow .2s';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
